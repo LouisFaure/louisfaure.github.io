@@ -2,8 +2,8 @@
   "name": "Louis Faure",
   "short_name": "Louis Faure",
   "lang": "en-us",
-  "theme_color": "#3f51b5",
-  "background_color": "#3f51b5",
+  "theme_color": "#0A1922",
+  "background_color": "#0A1922",
   "icons": [{
     "src": "../img/icon-192.png",
     "sizes": "192x192",
