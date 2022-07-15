@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Recent &amp; Upcoming Talks | Louis Faure</title><link>/talk/</link><atom:link href="/talk/index.xml" rel="self" type="application/rss+xml"/><description>Recent &amp; Upcoming Talks</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate><image><url>/img/icon-192.png</url><title>Recent &amp; Upcoming Talks</title><link>/talk/</link></image><item><title>Example Talk</title><link>/talk/example/</link><pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate><guid>/talk/example/</guid><description>&lt;div class=&#34;alert alert-note&#34;&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Recent &amp; Upcoming Talks | Louis Faure</title><link>louisfaure.github.io/talk/</link><atom:link href="louisfaure.github.io/talk/index.xml" rel="self" type="application/rss+xml"/><description>Recent &amp; Upcoming Talks</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate><image><url>louisfaure.github.io/img/icon-192.png</url><title>Recent &amp; Upcoming Talks</title><link>louisfaure.github.io/talk/</link></image><item><title>Example Talk</title><link>louisfaure.github.io/talk/example/</link><pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate><guid>louisfaure.github.io/talk/example/</guid><description>&lt;div class=&#34;alert alert-note&#34;&gt;
 &lt;div&gt;
 Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.
 &lt;/div&gt;
@@ -62,12 +62,12 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div&gt;
 &lt;script type=&#34;text/javascript&#34;&gt;
 window.onload = function() {
-var url = &#34;\/&#34; + &#39;.\/talk\/example\/FENS_poster.pdf&#39;;
+var url = &#34;louisfaure.github.io\/&#34; + &#39;.\/talk\/example\/FENS_poster.pdf&#39;;
 var hidePaginator = &#34;&#34; === &#34;true&#34;;
 var hideLoader = &#34;&#34; === &#34;true&#34;;
 var selectedPageNum = parseInt(&#34;&#34;) || 1;
 var pdfjsLib = window[&#39;pdfjs-dist/build/pdf&#39;];
-pdfjsLib.GlobalWorkerOptions.workerSrc = &#34;\/&#34; + &#39;/js/pdf-js/build/pdf.worker.js&#39;;
+pdfjsLib.GlobalWorkerOptions.workerSrc = &#34;louisfaure.github.io\/&#34; + &#39;/js/pdf-js/build/pdf.worker.js&#39;;
 var pdfDoc = null,
 pageNum = selectedPageNum,
 pageRendering = false,
