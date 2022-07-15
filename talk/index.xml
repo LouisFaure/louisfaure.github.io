@@ -62,7 +62,7 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div&gt;
 &lt;script type=&#34;text/javascript&#34;&gt;
 window.onload = function() {
-var url = &#34;\/&#34; + &#39;.\/FENS_poster.pdf&#39;;
+var url = &#34;\/&#34; + &#39;.\/static\/FENS_poster.pdf&#39;;
 var hidePaginator = &#34;&#34; === &#34;true&#34;;
 var hideLoader = &#34;&#34; === &#34;true&#34;;
 var selectedPageNum = parseInt(&#34;&#34;) || 1;
