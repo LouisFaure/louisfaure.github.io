@@ -1,5 +1,143 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Demo | Louis Faure</title><link>/categories/demo/</link><atom:link href="/categories/demo/index.xml" rel="self" type="application/rss+xml"/><description>Demo</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0000</lastBuildDate><image><url>/img/icon-192.png</url><title>Demo</title><link>/categories/demo/</link></image><item><title>Academic: the website builder for Hugo</title><link>/post/getting-started/</link><pubDate>Wed, 20 Apr 2016 00:00:00 +0000</pubDate><guid>/post/getting-started/</guid><description>
 &lt;p&gt;&lt;strong&gt;Create a free website with Academic using Markdown, Jupyter, or RStudio. Choose a beautiful color theme and build anything with the Page Builder - over 40 &lt;em&gt;widgets&lt;/em&gt;, &lt;em&gt;themes&lt;/em&gt;, and &lt;em&gt;language packs&lt;/em&gt; included!&lt;/strong&gt;&lt;/p&gt;
+&lt;script type=&#34;text/javascript&#34; src= &#39;/js/pdf-js/build/pdf.js&#39;&gt;&lt;/script&gt;
+&lt;style&gt;
+#the-canvas {
+border: 1px solid black;
+direction: ltr;
+width: 100%;
+height: auto;
+display: none;
+}
+#paginator {
+display: none;
+text-align: center;
+margin-bottom: 10px;
+}
+#loadingWrapper {
+display: none;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 350px;
+}
+#loading {
+display: inline-block;
+width: 50px;
+height: 50px;
+border: 3px solid #d2d0d0;;
+border-radius: 50%;
+border-top-color: #383838;
+animation: spin 1s ease-in-out infinite;
+-webkit-animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+&lt;/style&gt;
+&lt;div id=&#34;paginator&#34;&gt;
+&lt;button id=&#34;prev&#34;&gt;Previous&lt;/button&gt;
+&lt;button id=&#34;next&#34;&gt;Next&lt;/button&gt;
+&amp;nbsp; &amp;nbsp;
+&lt;span&gt;Page: &lt;span id=&#34;page_num&#34;&gt;&lt;/span&gt; / &lt;span id=&#34;page_count&#34;&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id=&#34;embed-pdf-container&#34;&gt;
+&lt;div id=&#34;loadingWrapper&#34;&gt;
+&lt;div id=&#34;loading&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;canvas id=&#34;the-canvas&#34;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;script type=&#34;text/javascript&#34;&gt;
+window.onload = function() {
+var url = &#34;\/&#34; + &#39;.\/FENS_poster.pdf&#39;;
+var hidePaginator = &#34;&#34; === &#34;true&#34;;
+var hideLoader = &#34;&#34; === &#34;true&#34;;
+var selectedPageNum = parseInt(&#34;&#34;) || 1;
+var pdfjsLib = window[&#39;pdfjs-dist/build/pdf&#39;];
+pdfjsLib.GlobalWorkerOptions.workerSrc = &#34;\/&#34; + &#39;/js/pdf-js/build/pdf.worker.js&#39;;
+var pdfDoc = null,
+pageNum = selectedPageNum,
+pageRendering = false,
+pageNumPending = null,
+scale = 3,
+canvas = document.getElementById(&#39;the-canvas&#39;),
+ctx = canvas.getContext(&#39;2d&#39;),
+paginator = document.getElementById(&#34;paginator&#34;),
+loadingWrapper = document.getElementById(&#39;loadingWrapper&#39;);
+showPaginator();
+showLoader();
+function renderPage(num) {
+pageRendering = true;
+pdfDoc.getPage(num).then(function(page) {
+var viewport = page.getViewport({scale: scale});
+canvas.height = viewport.height;
+canvas.width = viewport.width;
+var renderContext = {
+canvasContext: ctx,
+viewport: viewport
+};
+var renderTask = page.render(renderContext);
+renderTask.promise.then(function() {
+pageRendering = false;
+showContent();
+if (pageNumPending !== null) {
+renderPage(pageNumPending);
+pageNumPending = null;
+}
+});
+});
+document.getElementById(&#39;page_num&#39;).textContent = num;
+}
+function showContent() {
+loadingWrapper.style.display = &#39;none&#39;;
+canvas.style.display = &#39;block&#39;;
+}
+function showLoader() {
+if(hideLoader) return
+loadingWrapper.style.display = &#39;flex&#39;;
+canvas.style.display = &#39;none&#39;;
+}
+function showPaginator() {
+if(hidePaginator) return
+paginator.style.display = &#39;block&#39;;
+}
+function queueRenderPage(num) {
+if (pageRendering) {
+pageNumPending = num;
+} else {
+renderPage(num);
+}
+}
+function onPrevPage() {
+if (pageNum &lt;= 1) {
+return;
+}
+pageNum--;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;prev&#39;).addEventListener(&#39;click&#39;, onPrevPage);
+function onNextPage() {
+if (pageNum &gt;= pdfDoc.numPages) {
+return;
+}
+pageNum++;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;next&#39;).addEventListener(&#39;click&#39;, onNextPage);
+pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+pdfDoc = pdfDoc_;
+var numPages = pdfDoc.numPages;
+document.getElementById(&#39;page_count&#39;).textContent = numPages;
+if(pageNum &gt; numPages) {
+pageNum = numPages
+}
+renderPage(pageNum);
+});
+}
+&lt;/script&gt;
 &lt;p&gt;&lt;a href=&#34;https://academic-demo.netlify.com/&#34; target=&#34;_blank&#34;&gt;Check out the latest &lt;strong&gt;demo&lt;/strong&gt;&lt;/a&gt; of what you&amp;rsquo;ll get in less than 10 minutes, or &lt;a href=&#34;https://sourcethemes.com/academic/#expo&#34; target=&#34;_blank&#34;&gt;view the &lt;strong&gt;showcase&lt;/strong&gt;&lt;/a&gt; of personal, project, and business sites.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;👉 &lt;a href=&#34;#install&#34;&gt;&lt;strong&gt;Get Started&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
