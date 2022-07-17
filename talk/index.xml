@@ -1,16 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Recent &amp; Upcoming Talks | Louis Faure</title><link>https://louisfaure.github.io/talk/</link><atom:link href="https://louisfaure.github.io/talk/index.xml" rel="self" type="application/rss+xml"/><description>Recent &amp; Upcoming Talks</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate><image><url>https://louisfaure.github.io/img/icon-192.png</url><title>Recent &amp; Upcoming Talks</title><link>https://louisfaure.github.io/talk/</link></image><item><title>Example Talk</title><link>https://louisfaure.github.io/talk/example/</link><pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/example/</guid><description>&lt;div class=&#34;alert alert-note&#34;&gt;
-&lt;div&gt;
-Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Academic&amp;rsquo;s &lt;a href=&#34;https://sourcethemes.com/academic/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;Slides&lt;/em&gt;&lt;/a&gt; feature and link using &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to &lt;code&gt;static/&lt;/code&gt; and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Further talk details can easily be added to this page using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
-&lt;script type=&#34;text/javascript&#34; src= &#39;/js/pdf-js/build/pdf.js&#39;&gt;&lt;/script&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Talks &amp; Posters | Louis Faure</title><link>https://louisfaure.github.io/talk/</link><atom:link href="https://louisfaure.github.io/talk/index.xml" rel="self" type="application/rss+xml"/><description>Talks &amp; Posters</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 09 Jul 2022 00:00:00 +0000</lastBuildDate><image><url>https://louisfaure.github.io/img/icon-192.png</url><title>Talks &amp; Posters</title><link>https://louisfaure.github.io/talk/</link></image><item><title>Poster for FENS: Schwann cell precursors represent a neural crest-like state with biased multipotency</title><link>https://louisfaure.github.io/talk/fens/</link><pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/fens/</guid><description>&lt;script type=&#34;text/javascript&#34; src= &#39;/js/pdf-js/build/pdf.js&#39;&gt;&lt;/script&gt;
 &lt;style&gt;
 #the-canvas {
 border: 1px solid black;
@@ -62,7 +50,281 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div&gt;
 &lt;script type=&#34;text/javascript&#34;&gt;
 window.onload = function() {
-var url = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;.\/talk\/example\/FENS_poster.pdf&#39;;
+var url = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;.\/talk\/fens\/FENS_poster.pdf&#39;;
+var hidePaginator = &#34;true&#34; === &#34;true&#34;;
+var hideLoader = &#34;&#34; === &#34;true&#34;;
+var selectedPageNum = parseInt(&#34;&#34;) || 1;
+var pdfjsLib = window[&#39;pdfjs-dist/build/pdf&#39;];
+pdfjsLib.GlobalWorkerOptions.workerSrc = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;/js/pdf-js/build/pdf.worker.js&#39;;
+var pdfDoc = null,
+pageNum = selectedPageNum,
+pageRendering = false,
+pageNumPending = null,
+scale = 3,
+canvas = document.getElementById(&#39;the-canvas&#39;),
+ctx = canvas.getContext(&#39;2d&#39;),
+paginator = document.getElementById(&#34;paginator&#34;),
+loadingWrapper = document.getElementById(&#39;loadingWrapper&#39;);
+showPaginator();
+showLoader();
+function renderPage(num) {
+pageRendering = true;
+pdfDoc.getPage(num).then(function(page) {
+var viewport = page.getViewport({scale: scale});
+canvas.height = viewport.height;
+canvas.width = viewport.width;
+var renderContext = {
+canvasContext: ctx,
+viewport: viewport
+};
+var renderTask = page.render(renderContext);
+renderTask.promise.then(function() {
+pageRendering = false;
+showContent();
+if (pageNumPending !== null) {
+renderPage(pageNumPending);
+pageNumPending = null;
+}
+});
+});
+document.getElementById(&#39;page_num&#39;).textContent = num;
+}
+function showContent() {
+loadingWrapper.style.display = &#39;none&#39;;
+canvas.style.display = &#39;block&#39;;
+}
+function showLoader() {
+if(hideLoader) return
+loadingWrapper.style.display = &#39;flex&#39;;
+canvas.style.display = &#39;none&#39;;
+}
+function showPaginator() {
+if(hidePaginator) return
+paginator.style.display = &#39;block&#39;;
+}
+function queueRenderPage(num) {
+if (pageRendering) {
+pageNumPending = num;
+} else {
+renderPage(num);
+}
+}
+function onPrevPage() {
+if (pageNum &lt;= 1) {
+return;
+}
+pageNum--;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;prev&#39;).addEventListener(&#39;click&#39;, onPrevPage);
+function onNextPage() {
+if (pageNum &gt;= pdfDoc.numPages) {
+return;
+}
+pageNum++;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;next&#39;).addEventListener(&#39;click&#39;, onNextPage);
+pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+pdfDoc = pdfDoc_;
+var numPages = pdfDoc.numPages;
+document.getElementById(&#39;page_count&#39;).textContent = numPages;
+if(pageNum &gt; numPages) {
+pageNum = numPages
+}
+renderPage(pageNum);
+});
+}
+&lt;/script&gt;</description></item><item><title>EMBL-EBI lecture: Introduction to trajectory inference techniques</title><link>https://louisfaure.github.io/talk/embl/</link><pubDate>Fri, 04 Mar 2022 10:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/embl/</guid><description>&lt;script type=&#34;text/javascript&#34; src= &#39;/js/pdf-js/build/pdf.js&#39;&gt;&lt;/script&gt;
+&lt;style&gt;
+#the-canvas {
+border: 1px solid black;
+direction: ltr;
+width: 100%;
+height: auto;
+display: none;
+}
+#paginator {
+display: none;
+text-align: center;
+margin-bottom: 10px;
+}
+#loadingWrapper {
+display: none;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 350px;
+}
+#loading {
+display: inline-block;
+width: 50px;
+height: 50px;
+border: 3px solid #d2d0d0;;
+border-radius: 50%;
+border-top-color: #383838;
+animation: spin 1s ease-in-out infinite;
+-webkit-animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+&lt;/style&gt;
+&lt;div id=&#34;paginator&#34;&gt;
+&lt;button id=&#34;prev&#34;&gt;Previous&lt;/button&gt;
+&lt;button id=&#34;next&#34;&gt;Next&lt;/button&gt;
+&amp;nbsp; &amp;nbsp;
+&lt;span&gt;Page: &lt;span id=&#34;page_num&#34;&gt;&lt;/span&gt; / &lt;span id=&#34;page_count&#34;&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id=&#34;embed-pdf-container&#34;&gt;
+&lt;div id=&#34;loadingWrapper&#34;&gt;
+&lt;div id=&#34;loading&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;canvas id=&#34;the-canvas&#34;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;script type=&#34;text/javascript&#34;&gt;
+window.onload = function() {
+var url = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;.\/talk\/embl\/slides.pdf&#39;;
+var hidePaginator = &#34;&#34; === &#34;true&#34;;
+var hideLoader = &#34;&#34; === &#34;true&#34;;
+var selectedPageNum = parseInt(&#34;&#34;) || 1;
+var pdfjsLib = window[&#39;pdfjs-dist/build/pdf&#39;];
+pdfjsLib.GlobalWorkerOptions.workerSrc = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;/js/pdf-js/build/pdf.worker.js&#39;;
+var pdfDoc = null,
+pageNum = selectedPageNum,
+pageRendering = false,
+pageNumPending = null,
+scale = 3,
+canvas = document.getElementById(&#39;the-canvas&#39;),
+ctx = canvas.getContext(&#39;2d&#39;),
+paginator = document.getElementById(&#34;paginator&#34;),
+loadingWrapper = document.getElementById(&#39;loadingWrapper&#39;);
+showPaginator();
+showLoader();
+function renderPage(num) {
+pageRendering = true;
+pdfDoc.getPage(num).then(function(page) {
+var viewport = page.getViewport({scale: scale});
+canvas.height = viewport.height;
+canvas.width = viewport.width;
+var renderContext = {
+canvasContext: ctx,
+viewport: viewport
+};
+var renderTask = page.render(renderContext);
+renderTask.promise.then(function() {
+pageRendering = false;
+showContent();
+if (pageNumPending !== null) {
+renderPage(pageNumPending);
+pageNumPending = null;
+}
+});
+});
+document.getElementById(&#39;page_num&#39;).textContent = num;
+}
+function showContent() {
+loadingWrapper.style.display = &#39;none&#39;;
+canvas.style.display = &#39;block&#39;;
+}
+function showLoader() {
+if(hideLoader) return
+loadingWrapper.style.display = &#39;flex&#39;;
+canvas.style.display = &#39;none&#39;;
+}
+function showPaginator() {
+if(hidePaginator) return
+paginator.style.display = &#39;block&#39;;
+}
+function queueRenderPage(num) {
+if (pageRendering) {
+pageNumPending = num;
+} else {
+renderPage(num);
+}
+}
+function onPrevPage() {
+if (pageNum &lt;= 1) {
+return;
+}
+pageNum--;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;prev&#39;).addEventListener(&#39;click&#39;, onPrevPage);
+function onNextPage() {
+if (pageNum &gt;= pdfDoc.numPages) {
+return;
+}
+pageNum++;
+queueRenderPage(pageNum);
+}
+document.getElementById(&#39;next&#39;).addEventListener(&#39;click&#39;, onNextPage);
+pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+pdfDoc = pdfDoc_;
+var numPages = pdfDoc.numPages;
+document.getElementById(&#39;page_count&#39;).textContent = numPages;
+if(pageNum &gt; numPages) {
+pageNum = numPages
+}
+renderPage(pageNum);
+});
+}
+&lt;/script&gt;</description></item><item><title>Seminar: Transcriptional landscape of fate choices in the sensory lineages</title><link>https://louisfaure.github.io/talk/bioinfokarolinska/</link><pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/bioinfokarolinska/</guid><description>&lt;script type=&#34;text/javascript&#34; src= &#39;/js/pdf-js/build/pdf.js&#39;&gt;&lt;/script&gt;
+&lt;style&gt;
+#the-canvas {
+border: 1px solid black;
+direction: ltr;
+width: 100%;
+height: auto;
+display: none;
+}
+#paginator {
+display: none;
+text-align: center;
+margin-bottom: 10px;
+}
+#loadingWrapper {
+display: none;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 350px;
+}
+#loading {
+display: inline-block;
+width: 50px;
+height: 50px;
+border: 3px solid #d2d0d0;;
+border-radius: 50%;
+border-top-color: #383838;
+animation: spin 1s ease-in-out infinite;
+-webkit-animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+to { -webkit-transform: rotate(360deg); }
+}
+&lt;/style&gt;
+&lt;div id=&#34;paginator&#34;&gt;
+&lt;button id=&#34;prev&#34;&gt;Previous&lt;/button&gt;
+&lt;button id=&#34;next&#34;&gt;Next&lt;/button&gt;
+&amp;nbsp; &amp;nbsp;
+&lt;span&gt;Page: &lt;span id=&#34;page_num&#34;&gt;&lt;/span&gt; / &lt;span id=&#34;page_count&#34;&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id=&#34;embed-pdf-container&#34;&gt;
+&lt;div id=&#34;loadingWrapper&#34;&gt;
+&lt;div id=&#34;loading&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;canvas id=&#34;the-canvas&#34;&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;script type=&#34;text/javascript&#34;&gt;
+window.onload = function() {
+var url = &#34;https:\/\/louisfaure.github.io\/&#34; + &#39;.\/talk\/bioinfokarolinska\/slides.pdf&#39;;
 var hidePaginator = &#34;&#34; === &#34;true&#34;;
 var hideLoader = &#34;&#34; === &#34;true&#34;;
 var selectedPageNum = parseInt(&#34;&#34;) || 1;
