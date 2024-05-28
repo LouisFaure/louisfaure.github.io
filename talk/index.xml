@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Talks &amp; Posters | Louis Faure</title><link>https://louisfaure.github.io/talk/</link><atom:link href="https://louisfaure.github.io/talk/index.xml" rel="self" type="application/rss+xml"/><description>Talks &amp; Posters</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 09 Jul 2022 00:00:00 +0000</lastBuildDate><image><url>https://louisfaure.github.io/img/icon-192.png</url><title>Talks &amp; Posters</title><link>https://louisfaure.github.io/talk/</link></image><item><title>Poster for FENS: Schwann cell precursors represent a neural crest-like state with biased multipotency</title><link>https://louisfaure.github.io/talk/fens/</link><pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/fens/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Talks &amp; Posters | Louis Faure</title><link>https://louis.faure.dev/talk/</link><atom:link href="https://louis.faure.dev/talk/index.xml" rel="self" type="application/rss+xml"/><description>Talks &amp; Posters</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 09 Jul 2022 00:00:00 +0000</lastBuildDate><image><url>https://louis.faure.dev/img/icon-192.png</url><title>Talks &amp; Posters</title><link>https://louis.faure.dev/talk/</link></image><item><title>Poster for FENS: Schwann cell precursors represent a neural crest-like state with biased multipotency</title><link>https://louis.faure.dev/talk/fens/</link><pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/fens/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
 &lt;style>
 #the-canvas {
 border: 1px solid black;
@@ -50,12 +50,12 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div>
 &lt;script type="text/javascript">
 window.onload = function() {
-var url = "https:\/\/louisfaure.github.io\/" + '.\/talk\/fens\/FENS_poster.pdf';
+var url = "https:\/\/louis.faure.dev\/" + '.\/talk\/fens\/FENS_poster.pdf';
 var hidePaginator = "true" === "true";
 var hideLoader = "" === "true";
 var selectedPageNum = parseInt("") || 1;
 var pdfjsLib = window['pdfjs-dist/build/pdf'];
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louisfaure.github.io\/" + '/js/pdf-js/build/pdf.worker.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louis.faure.dev\/" + '/js/pdf-js/build/pdf.worker.js';
 var pdfDoc = null,
 pageNum = selectedPageNum,
 pageRendering = false,
@@ -135,7 +135,7 @@ pageNum = numPages
 renderPage(pageNum);
 });
 }
-&lt;/script></description></item><item><title>EMBL-EBI lecture: Introduction to trajectory inference techniques</title><link>https://louisfaure.github.io/talk/embl/</link><pubDate>Fri, 04 Mar 2022 10:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/embl/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
+&lt;/script></description></item><item><title>EMBL-EBI lecture: Introduction to trajectory inference techniques</title><link>https://louis.faure.dev/talk/embl/</link><pubDate>Fri, 04 Mar 2022 10:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/embl/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
 &lt;style>
 #the-canvas {
 border: 1px solid black;
@@ -187,12 +187,12 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div>
 &lt;script type="text/javascript">
 window.onload = function() {
-var url = "https:\/\/louisfaure.github.io\/" + '.\/talk\/embl\/slides.pdf';
+var url = "https:\/\/louis.faure.dev\/" + '.\/talk\/embl\/slides.pdf';
 var hidePaginator = "" === "true";
 var hideLoader = "" === "true";
 var selectedPageNum = parseInt("") || 1;
 var pdfjsLib = window['pdfjs-dist/build/pdf'];
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louisfaure.github.io\/" + '/js/pdf-js/build/pdf.worker.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louis.faure.dev\/" + '/js/pdf-js/build/pdf.worker.js';
 var pdfDoc = null,
 pageNum = selectedPageNum,
 pageRendering = false,
@@ -272,7 +272,7 @@ pageNum = numPages
 renderPage(pageNum);
 });
 }
-&lt;/script></description></item><item><title>Seminar: Transcriptional landscape of fate choices in the sensory lineages</title><link>https://louisfaure.github.io/talk/bioinfokarolinska/</link><pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate><guid>https://louisfaure.github.io/talk/bioinfokarolinska/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
+&lt;/script></description></item><item><title>Seminar: Transcriptional landscape of fate choices in the sensory lineages</title><link>https://louis.faure.dev/talk/bioinfokarolinska/</link><pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/bioinfokarolinska/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
 &lt;style>
 #the-canvas {
 border: 1px solid black;
@@ -324,12 +324,12 @@ to { -webkit-transform: rotate(360deg); }
 &lt;/div>
 &lt;script type="text/javascript">
 window.onload = function() {
-var url = "https:\/\/louisfaure.github.io\/" + '.\/talk\/bioinfokarolinska\/slides.pdf';
+var url = "https:\/\/louis.faure.dev\/" + '.\/talk\/bioinfokarolinska\/slides.pdf';
 var hidePaginator = "" === "true";
 var hideLoader = "" === "true";
 var selectedPageNum = parseInt("") || 1;
 var pdfjsLib = window['pdfjs-dist/build/pdf'];
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louisfaure.github.io\/" + '/js/pdf-js/build/pdf.worker.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https:\/\/louis.faure.dev\/" + '/js/pdf-js/build/pdf.worker.js';
 var pdfDoc = null,
 pageNum = selectedPageNum,
 pageRendering = false,
