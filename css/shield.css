@@ -7,3 +7,12 @@ img.btn.btn-shield {
     padding: 0px 0.0rem 0px .0rem;
     max-width: none !important;
 }
+
+.btn {
+    transition: transform 0.5s ease !important;
+}
+
+.btn:hover {
+    transition: transform 0.5s ease;
+    transform: translateY(-2px);
+}
