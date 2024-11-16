@@ -1,6 +1,6 @@
 {
     "name": "Louis Faure",
-    "short_name": "LF",
+    "short_name": "Louis",
     "lang": "en",
     "theme_color": "black",
     "background_color": "white",
@@ -14,5 +14,5 @@
       "type": "image/png"
        }],
     "display": "standalone",
-    "start_url": "louis.faure.dev"
+    "start_url": ""
   }
