@@ -1,4 +1,174 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts | Louis Faure</title><link>https://louis.faure.dev/post/</link><atom:link href="https://louis.faure.dev/post/index.xml" rel="self" type="application/rss+xml"/><description>Posts</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 29 Mar 2024 00:00:00 +0000</lastBuildDate><image><url>https://louis.faure.dev/img/icon-192.png</url><title>Posts</title><link>https://louis.faure.dev/post/</link></image><item><title>Scalable &amp; Sustainable Computational Biology: Vectorization, Indexing Tricks, and Numba/Cython</title><link>https://louis.faure.dev/post/efficient_code_python/</link><pubDate>Fri, 29 Mar 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/post/efficient_code_python/</guid><description>&lt;p>&lt;a href="https://github.com/LouisFaure/Blog_notebooks/blob/main/efficient_code_python
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts | Louis Faure</title><link>https://louis.faure.dev/post/</link><atom:link href="https://louis.faure.dev/post/index.xml" rel="self" type="application/rss+xml"/><description>Posts</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Jun 2025 00:00:00 +0000</lastBuildDate><image><url>https://louis.faure.dev/img/icon-192.png</url><title>Posts</title><link>https://louis.faure.dev/post/</link></image><item><title>Negative Binomial Modeling for scRNA-seq</title><link>https://louis.faure.dev/post/nb/</link><pubDate>Sun, 01 Jun 2025 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/post/nb/</guid><description>&lt;p>The &lt;strong>negative binomial (NB) distribution&lt;/strong> is the canonical statistical model for single-cell RNA-seq (&lt;strong>scRNA-seq&lt;/strong>) gene expression integer counts. It’s favored over the Poisson distribution because &lt;strong>real scRNA-seq data are overdispersed&lt;/strong>—their variance greatly exceeds their mean–due to both biological and technical factors (cell heterogeneity, bursty transcription, varied sequencing depth, dropouts, etc.).&lt;/p>
+&lt;p>The Poisson’s simple assumption (&lt;strong>variance equals mean&lt;/strong>) fails in this context. In contrast, the NB augments the Poisson distribution with a &lt;strong>dispersion parameter&lt;/strong> ($\theta$), so its variance is $\sigma^2 = \mu + \mu^2 / \theta$ (for mean $\mu$). This flexibility means two genes with equal mean expression but different variances (as commonly seen) can be modeled, simply by adjusting $\theta$.&lt;/p>
+&lt;p>From a generative perspective, the NB arises as a &lt;strong>Poisson–Gamma mixture&lt;/strong>: each cell/gene’s unknown expression rate $\lambda$ is drawn from a Gamma distribution before Poisson sampling.&lt;/p>
+&lt;p>&lt;strong>Interpretability&lt;/strong> is another reason for NB’s use. Its parameters have clear biological meaning:&lt;/p>
+&lt;ul>
+&lt;li>$\mu$: expected transcript count&lt;/li>
+&lt;li>$\theta$: gene/cell-specific overdispersion&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="parameterizations-standard-and-logit-used-in-deep-learning">&lt;strong>Parameterizations: Standard and Logit (Used in Deep Learning)&lt;/strong>&lt;/h3>
+&lt;p>&lt;strong>Standard NB:&lt;/strong>&lt;br>
+Usually parameterized with shape ($\theta$, often called &lt;code>total_count&lt;/code>) and success probability ($p$):&lt;/p>
+$$\mu = \frac{\theta (1-p)}{p} \quad \text{and} \quad \sigma^2 = \mu + \frac{\mu^2}{\theta}$$
+&lt;p>&lt;strong>Logit Parameterization:&lt;/strong>&lt;br>
+For deep learning, the NB can be more robustly parameterized via &lt;strong>logits&lt;/strong> instead of $p$:&lt;/p>
+$$\text{logits} = \log\left(\frac{p}{1-p}\right), \quad \mu = \theta \cdot e^{-\text{logits}}$$
+&lt;p>Using logits stabilizes optimization, especially for auto-differentiation and large likelihoods.&lt;/p>
+&lt;hr>
+&lt;h3 id="numpyros-negative-binomial-logits-implementation">&lt;strong>NumPyro&amp;rsquo;s Negative Binomial Logits Implementation&lt;/strong>&lt;/h3>
+&lt;p>Below is the core class definition for &lt;code>NegativeBinomialLogits&lt;/code> within NumPyro, showcasing how this parameterization is handled internally.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#66d9ef">class&lt;/span> &lt;span style="color:#a6e22e">NegativeBinomialLogits&lt;/span>(GammaPoisson):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> arg_constraints &lt;span style="color:#f92672">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;total_count&amp;#34;&lt;/span>: constraints&lt;span style="color:#f92672">.&lt;/span>positive,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e6db74">&amp;#34;logits&amp;#34;&lt;/span>: constraints&lt;span style="color:#f92672">.&lt;/span>real,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> support &lt;span style="color:#f92672">=&lt;/span> constraints&lt;span style="color:#f92672">.&lt;/span>nonnegative_integer
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> __init__(self, total_count, logits, _, validate_args&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">None&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>total_count, self&lt;span style="color:#f92672">.&lt;/span>logits &lt;span style="color:#f92672">=&lt;/span> promote_shapes(total_count, logits)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> concentration &lt;span style="color:#f92672">=&lt;/span> total_count
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> rate &lt;span style="color:#f92672">=&lt;/span> jnp&lt;span style="color:#f92672">.&lt;/span>exp(&lt;span style="color:#f92672">-&lt;/span>logits)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> super()&lt;span style="color:#f92672">.&lt;/span>__init__(concentration, rate, validate_args&lt;span style="color:#f92672">=&lt;/span>validate_args)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">@validate_sample&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">def&lt;/span> &lt;span style="color:#a6e22e">log_prob&lt;/span>(self, value):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#66d9ef">return&lt;/span> &lt;span style="color:#f92672">-&lt;/span>(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> self&lt;span style="color:#f92672">.&lt;/span>total_count &lt;span style="color:#f92672">*&lt;/span> nn&lt;span style="color:#f92672">.&lt;/span>softplus(self&lt;span style="color:#f92672">.&lt;/span>logits)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">+&lt;/span> value &lt;span style="color:#f92672">*&lt;/span> nn&lt;span style="color:#f92672">.&lt;/span>softplus(&lt;span style="color:#f92672">-&lt;/span>self&lt;span style="color:#f92672">.&lt;/span>logits)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#f92672">+&lt;/span> _log_beta_1(self&lt;span style="color:#f92672">.&lt;/span>total_count, value)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> )
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>This &lt;code>NegativeBinomialLogits&lt;/code> class directly implements the logit parameterization, inheriting from &lt;code>GammaPoisson&lt;/code> which underlines the Poisson-Gamma mixture interpretation.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>&lt;code>__init__&lt;/code>&lt;/strong>: The constructor takes &lt;code>total_count&lt;/code> (our $\theta$) and &lt;code>logits&lt;/code> as input. Crucially, it transforms these into &lt;code>concentration&lt;/code> and &lt;code>rate&lt;/code> parameters for the underlying Gamma distribution (&lt;code>jnp.exp(-logits)&lt;/code> is used to derive the rate from logits). This reflects the Poisson-Gamma mixture where the mean of the Poisson is drawn from a Gamma distribution defined by these concentration/rate parameters.&lt;/li>
+&lt;li>&lt;strong>&lt;code>log_prob&lt;/code>&lt;/strong>: This is the main method that will participate in the loss trained by our VAE (alongside the KL term). It calculates the log-probability of observing a &lt;code>value&lt;/code> (i.e., a specific count) given the &lt;code>total_count&lt;/code> and &lt;code>logits&lt;/code>. The formula used is a numerically stable computation of the negative binomial log-likelihood, leveraging &lt;code>nn.softplus&lt;/code> for &lt;code>log(1+exp(x))&lt;/code> terms and &lt;code>_log_beta_1&lt;/code> for the beta function-related terms, ensuring robustness particularly for deep learning optimization.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h3 id="practical-implementation-in-vaes-eg-scvi">&lt;strong>Practical Implementation in VAEs (e.g., scVI)&lt;/strong>&lt;/h3>
+&lt;p>Typical scVI-like models predict expected gene counts using neural networks and model observed counts as NB.
+Two common implementations differ mainly in how they handle normalization and numerical stability:&lt;/p>
+&lt;h4 id="1-standard-softmax-version-used-by-scvi">&lt;strong>1. Standard (Softmax) Version used by scVI&lt;/strong>&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>rate &lt;span style="color:#f92672">=&lt;/span> x_decoder(z) &lt;span style="color:#75715e"># Unconstrained decoder output&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rate_softmax &lt;span style="color:#f92672">=&lt;/span> jax&lt;span style="color:#f92672">.&lt;/span>nn&lt;span style="color:#f92672">.&lt;/span>softmax(rate) &lt;span style="color:#75715e"># Gene proportions (sum to 1)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mu &lt;span style="color:#f92672">=&lt;/span> jnp&lt;span style="color:#f92672">.&lt;/span>log(l &lt;span style="color:#f92672">*&lt;/span> rate_softmax &lt;span style="color:#f92672">+&lt;/span> epsilon) &lt;span style="color:#75715e"># Expected log-counts (scaled by library size l)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>nb_logits &lt;span style="color:#f92672">=&lt;/span> mu &lt;span style="color:#f92672">-&lt;/span> jnp&lt;span style="color:#f92672">.&lt;/span>log(theta &lt;span style="color:#f92672">+&lt;/span> epsilon)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>x_dist &lt;span style="color:#f92672">=&lt;/span> dist&lt;span style="color:#f92672">.&lt;/span>NegativeBinomialLogits(total_count&lt;span style="color:#f92672">=&lt;/span>theta &lt;span style="color:#f92672">+&lt;/span> epsilon, logits&lt;span style="color:#f92672">=&lt;/span>nb_logits)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Description / Formula / Interpretation&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>z&lt;/code>&lt;/td>
+&lt;td>Latent representation from the VAE encoder.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>x_decoder(z)&lt;/code>&lt;/td>
+&lt;td>Neural network output (logits for each gene, unnormalized).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>rate&lt;/code>&lt;/td>
+&lt;td>Unnormalized decoder output (log-space) → interpretable as &lt;strong>relative log-expression&lt;/strong>.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>rate_softmax&lt;/code>&lt;/td>
+&lt;td>Softmax over genes → interpretable as &lt;strong>cell-specific gene proportions&lt;/strong>.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>l&lt;/code>&lt;/td>
+&lt;td>Library size (total counts per cell, either learned or fixed).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>mu&lt;/code>&lt;/td>
+&lt;td>Log of the &lt;strong>expected counts&lt;/strong> for each gene: $\mu = \log(l \cdot \text{softmax(rate)})$ (This ensures $\sum \exp(\mu) \approx l$, matching the library size.)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>theta&lt;/code>&lt;/td>
+&lt;td>Dispersion parameter (gene-specific).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>nb_logits&lt;/code>&lt;/td>
+&lt;td>Computed as $\log(\mu / \theta)$, the log-odds for the NB.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>epsilon&lt;/code>&lt;/td>
+&lt;td>Small constant for numerical stability.&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h4 id="2-stable-log-space-version">&lt;strong>2. Stable (Log-Space) Version&lt;/strong>&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>rate &lt;span style="color:#f92672">=&lt;/span> x_decoder(z)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mu &lt;span style="color:#f92672">=&lt;/span> jnp&lt;span style="color:#f92672">.&lt;/span>log(l) &lt;span style="color:#f92672">+&lt;/span> rate &lt;span style="color:#f92672">-&lt;/span> jax&lt;span style="color:#f92672">.&lt;/span>scipy&lt;span style="color:#f92672">.&lt;/span>special&lt;span style="color:#f92672">.&lt;/span>logsumexp(rate, axis&lt;span style="color:#f92672">=-&lt;/span>&lt;span style="color:#ae81ff">1&lt;/span>, keepdims&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#66d9ef">True&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>nb_logits &lt;span style="color:#f92672">=&lt;/span> mu &lt;span style="color:#f92672">-&lt;/span> logtheta
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>x_dist &lt;span style="color:#f92672">=&lt;/span> dist&lt;span style="color:#f92672">.&lt;/span>NegativeBinomialLogits(total_count&lt;span style="color:#f92672">=&lt;/span>jnp&lt;span style="color:#f92672">.&lt;/span>exp(logtheta), logits&lt;span style="color:#f92672">=&lt;/span>nb_logits)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>With the following changes:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Variable&lt;/th>
+&lt;th>Description / Formula / Interpretation&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;code>logsumexp(rate)&lt;/code>&lt;/td>
+&lt;td>Log of the sum of exponentials (numerically stable softmax denominator).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>mu&lt;/code>&lt;/td>
+&lt;td>Log expected counts, computed as: $\mu = \log(l) + \text{rate} - \text{logsumexp(rate)}$. This is equivalent to the first implementation: $\mu = \log(l \cdot \text{softmax(rate)})$, but avoids explicit softmax.&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>l&lt;/code>&lt;/td>
+&lt;td>Library size (total counts per cell, either learned or fixed).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>logtheta&lt;/code>&lt;/td>
+&lt;td>Directly learned log of the dispersion parameter (more numerically stable).&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;code>nb_logits&lt;/code>&lt;/td>
+&lt;td>Computed as $\log(\mu / \theta)$, where &lt;code>theta = exp(logtheta)&lt;/code>.&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>In that implementation, no need for &lt;code>epsilon&lt;/code>!&lt;/p>
+&lt;p>&lt;strong>Both approaches are mathematically equivalent.&lt;/strong> The second, log-space variant is regularly preferred in practice, especially as it avoids over/underflow errors in large or sparse data.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;strong>Aspect&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Softmax Version&lt;/strong>&lt;/th>
+&lt;th>&lt;strong>Log-Space Version&lt;/strong>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Normalization&lt;/td>
+&lt;td>Explicit softmax&lt;/td>
+&lt;td>Logsumexp in log-space&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Stability&lt;/td>
+&lt;td>Good, but softmax over/underflow&lt;/td>
+&lt;td>Excellent, all log-domain&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Dispersion Handling&lt;/td>
+&lt;td>Direct $\theta$&lt;/td>
+&lt;td>Log-dispersion (&lt;code>logtheta&lt;/code>)&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;p>&lt;strong>Summary&lt;/strong>:&lt;/p>
+&lt;ul>
+&lt;li>The negative binomial&amp;rsquo;s extra dispersion is essential for scRNA-seq modeling.&lt;/li>
+&lt;li>Deep learning models (e.g., scVI) implement NB via softmax, but here we propose logits parametrization for numerical stability and flexibility, employing log-space calculations for best results.&lt;/li>
+&lt;/ul></description></item><item><title>Scalable &amp; Sustainable Computational Biology: Vectorization, Indexing Tricks, and Numba/Cython</title><link>https://louis.faure.dev/post/efficient_code_python/</link><pubDate>Fri, 29 Mar 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/post/efficient_code_python/</guid><description>&lt;p>&lt;a href="https://github.com/LouisFaure/Blog_notebooks/blob/main/efficient_code_python
 /Efficient_code_python.ipynb">&lt;img alt="Jupyter Notebook" src="https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&amp;amp;logo=jupyter&amp;amp;logoColor=white" style="margin-left:0;margin-top:0;margin-bottom:0;border-radius:5px; box-shadow:0 4px 16px 0 rgba(0, 0, 0, 0.1);">&lt;/a>&lt;/p>
 &lt;p>Speeding up code is sometimes an overlooked aspect in the field of computational biology. Numerous constraints (multiple projects, thesis writing, pressure to publish, etc.) often lead many to write simple implementations of a given function, at the expense of efficiency. This is problematic as such code is not scalable, which can limit further discoveries done by other researchers. In this article, I will look at all tasks performed by a specific Python function I have designed, showing first an example of slow code, and then a suggestion of a faster implementation. I hope this will provide some tips to you to perform a scalable, more efficient, and &lt;a href="https://www.green-algorithms.org">environmentally friendly&lt;/a> science!&lt;/p>
 &lt;h2 id="the-task">The Task&lt;/h2>

@@ -16,3 +16,8 @@ img.btn.btn-shield {
     transition: transform 0.5s ease;
     transform: translateY(-2px);
 }
+
+
+pre {
+    font-size: .8rem !important;
+}
