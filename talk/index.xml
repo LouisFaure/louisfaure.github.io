@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Talks &amp; Posters | Louis Faure</title><link>https://louis.faure.dev/talk/</link><atom:link href="https://louis.faure.dev/talk/index.xml" rel="self" type="application/rss+xml"/><description>Talks &amp; Posters</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 29 Oct 2024 00:00:00 +0000</lastBuildDate><image><url>https://louis.faure.dev/img/headers/newyork.jpg</url><title>Talks &amp; Posters</title><link>https://louis.faure.dev/talk/</link></image><item><title>Talk on Interpretable VAE for modeling cell fate dynamics across tissue contexts</title><link>https://louis.faure.dev/talk/broad/</link><pubDate>Tue, 29 Oct 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/broad/</guid><description/></item><item><title>Talk for scverse community meeting: scFates, a scalable Python suite for fast tree inference and advanced pseudotime downstream analysis</title><link>https://louis.faure.dev/talk/scverse/</link><pubDate>Tue, 25 Jun 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/scverse/</guid><description/></item><item><title>Poster for GRS-GRC Single Cell Cancer Biology: Joint modeling of shared and disease-specific fate dynamics</title><link>https://louis.faure.dev/talk/grs-grc/</link><pubDate>Thu, 25 Apr 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/grs-grc/</guid><description/></item><item><title>Poster for FENS: Schwann cell precursors represent a neural crest-like state with biased multipotency</title><link>https://louis.faure.dev/talk/fens/</link><pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/fens/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
-&lt;style>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Talks &amp; Posters | Louis Faure</title><link>https://louis.faure.dev/talk/</link><atom:link href="https://louis.faure.dev/talk/index.xml" rel="self" type="application/rss+xml"/><description>Talks &amp; Posters</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Tue, 29 Oct 2024 00:00:00 +0000</lastBuildDate><image><url>https://louis.faure.dev/img/headers/newyork.jpg</url><title>Talks &amp; Posters</title><link>https://louis.faure.dev/talk/</link></image><item><title>Talk on Interpretable VAE for modeling cell fate dynamics across tissue contexts</title><link>https://louis.faure.dev/talk/broad/</link><pubDate>Tue, 29 Oct 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/broad/</guid><description/></item><item><title>Talk for scverse community meeting: scFates, a scalable Python suite for fast tree inference and advanced pseudotime downstream analysis</title><link>https://louis.faure.dev/talk/scverse/</link><pubDate>Tue, 25 Jun 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/scverse/</guid><description/></item><item><title>Poster for GRS-GRC Single Cell Cancer Biology: Joint modeling of shared and disease-specific fate dynamics</title><link>https://louis.faure.dev/talk/grs-grc/</link><pubDate>Thu, 25 Apr 2024 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/grs-grc/</guid><description/></item><item><title>Poster for FENS: Schwann cell precursors represent a neural crest-like state with biased multipotency</title><link>https://louis.faure.dev/talk/fens/</link><pubDate>Sat, 09 Jul 2022 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/fens/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'&gt;&lt;/script&gt;
+&lt;style&gt;
 #the-canvas {
 border: 1px solid black;
 direction: ltr;
@@ -35,20 +35,20 @@ to { -webkit-transform: rotate(360deg); }
 @-webkit-keyframes spin {
 to { -webkit-transform: rotate(360deg); }
 }
-&lt;/style>
-&lt;div id="paginator">
-&lt;button id="prev">Previous&lt;/button>
-&lt;button id="next">Next&lt;/button>
+&lt;/style&gt;
+&lt;div id="paginator"&gt;
+&lt;button id="prev"&gt;Previous&lt;/button&gt;
+&lt;button id="next"&gt;Next&lt;/button&gt;
 &amp;nbsp; &amp;nbsp;
-&lt;span>Page: &lt;span id="page_num">&lt;/span> / &lt;span id="page_count">&lt;/span>&lt;/span>
-&lt;/div>
-&lt;div id="embed-pdf-container">
-&lt;div id="loadingWrapper">
-&lt;div id="loading">&lt;/div>
-&lt;/div>
-&lt;canvas id="the-canvas">&lt;/canvas>
-&lt;/div>
-&lt;script type="text/javascript">
+&lt;span&gt;Page: &lt;span id="page_num"&gt;&lt;/span&gt; / &lt;span id="page_count"&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id="embed-pdf-container"&gt;
+&lt;div id="loadingWrapper"&gt;
+&lt;div id="loading"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;canvas id="the-canvas"&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
 window.onload = function() {
 var url = "https:\/\/louis.faure.dev\/" + '.\/talk\/fens\/FENS_poster.pdf';
 var hidePaginator = "true" === "true";
@@ -118,7 +118,7 @@ queueRenderPage(pageNum);
 }
 document.getElementById('prev').addEventListener('click', onPrevPage);
 function onNextPage() {
-if (pageNum >= pdfDoc.numPages) {
+if (pageNum &gt;= pdfDoc.numPages) {
 return;
 }
 pageNum++;
@@ -129,14 +129,14 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
 pdfDoc = pdfDoc_;
 var numPages = pdfDoc.numPages;
 document.getElementById('page_count').textContent = numPages;
-if(pageNum > numPages) {
+if(pageNum &gt; numPages) {
 pageNum = numPages
 }
 renderPage(pageNum);
 });
 }
-&lt;/script></description></item><item><title>EMBL-EBI lecture: Introduction to trajectory inference techniques</title><link>https://louis.faure.dev/talk/embl/</link><pubDate>Fri, 04 Mar 2022 10:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/embl/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'>&lt;/script>
-&lt;style>
+&lt;/script&gt;</description></item><item><title>EMBL-EBI lecture: Introduction to trajectory inference techniques</title><link>https://louis.faure.dev/talk/embl/</link><pubDate>Fri, 04 Mar 2022 10:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/embl/</guid><description>&lt;script type="text/javascript" src= '/js/pdf-js/build/pdf.js'&gt;&lt;/script&gt;
+&lt;style&gt;
 #the-canvas {
 border: 1px solid black;
 direction: ltr;
@@ -172,20 +172,20 @@ to { -webkit-transform: rotate(360deg); }
 @-webkit-keyframes spin {
 to { -webkit-transform: rotate(360deg); }
 }
-&lt;/style>
-&lt;div id="paginator">
-&lt;button id="prev">Previous&lt;/button>
-&lt;button id="next">Next&lt;/button>
+&lt;/style&gt;
+&lt;div id="paginator"&gt;
+&lt;button id="prev"&gt;Previous&lt;/button&gt;
+&lt;button id="next"&gt;Next&lt;/button&gt;
 &amp;nbsp; &amp;nbsp;
-&lt;span>Page: &lt;span id="page_num">&lt;/span> / &lt;span id="page_count">&lt;/span>&lt;/span>
-&lt;/div>
-&lt;div id="embed-pdf-container">
-&lt;div id="loadingWrapper">
-&lt;div id="loading">&lt;/div>
-&lt;/div>
-&lt;canvas id="the-canvas">&lt;/canvas>
-&lt;/div>
-&lt;script type="text/javascript">
+&lt;span&gt;Page: &lt;span id="page_num"&gt;&lt;/span&gt; / &lt;span id="page_count"&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id="embed-pdf-container"&gt;
+&lt;div id="loadingWrapper"&gt;
+&lt;div id="loading"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;canvas id="the-canvas"&gt;&lt;/canvas&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
 window.onload = function() {
 var url = "https:\/\/louis.faure.dev\/" + '.\/talk\/embl\/slides.pdf';
 var hidePaginator = "" === "true";
@@ -255,7 +255,7 @@ queueRenderPage(pageNum);
 }
 document.getElementById('prev').addEventListener('click', onPrevPage);
 function onNextPage() {
-if (pageNum >= pdfDoc.numPages) {
+if (pageNum &gt;= pdfDoc.numPages) {
 return;
 }
 pageNum++;
@@ -266,10 +266,10 @@ pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
 pdfDoc = pdfDoc_;
 var numPages = pdfDoc.numPages;
 document.getElementById('page_count').textContent = numPages;
-if(pageNum > numPages) {
+if(pageNum &gt; numPages) {
 pageNum = numPages
 }
 renderPage(pageNum);
 });
 }
-&lt;/script></description></item><item><title>Seminar: Transcriptional landscape of fate choices in the sensory lineages</title><link>https://louis.faure.dev/talk/bioinfokarolinska/</link><pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/bioinfokarolinska/</guid><description/></item></channel></rss>
+&lt;/script&gt;</description></item><item><title>Seminar: Transcriptional landscape of fate choices in the sensory lineages</title><link>https://louis.faure.dev/talk/bioinfokarolinska/</link><pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate><guid>https://louis.faure.dev/talk/bioinfokarolinska/</guid><description/></item></channel></rss>
